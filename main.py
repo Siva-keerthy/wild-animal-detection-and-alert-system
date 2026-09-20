@@ -15,9 +15,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import to_categorical
 import joblib
 
-# -------------------------------
-# 📥 Feature Extraction (32-D)
-# -------------------------------
+# Feature Extraction (32-D)
 def extract_best_features(file_path, segment_duration=5.0, hop_duration=1.0):
     try:
         audio, sr = librosa.load(file_path)
@@ -54,9 +52,7 @@ def extract_best_features(file_path, segment_duration=5.0, hop_duration=1.0):
         print(f"Error processing {file_path}: {e}")
         return None
 
-# ---------------------------------
-# 📁 Load Dataset from Folders
-# ---------------------------------
+# Load Dataset from Folders
 def load_features_from_folders(base_path=r'C:/Users/user/Desktop/animal_sounds'):
     features = []
     labels = []
@@ -65,7 +61,7 @@ def load_features_from_folders(base_path=r'C:/Users/user/Desktop/animal_sounds')
     for label in class_folders:
         folder_path = os.path.join(base_path, label)
         if not os.path.exists(folder_path):
-            print(f"❌ Folder not found: {folder_path}")
+            print(f" Folder not found: {folder_path}")
             continue
 
         for file in os.listdir(folder_path):
@@ -78,11 +74,9 @@ def load_features_from_folders(base_path=r'C:/Users/user/Desktop/animal_sounds')
 
     return np.array(features), np.array(labels)
 
-# ------------------------------
-# 🚀 Load and Prepare the Data
-# ------------------------------
+# Load and Prepare the Data
 features, labels = load_features_from_folders()
-print(f"✅ Loaded {len(features)} samples with {features.shape[1]} features each.")
+print(f"Loaded {len(features)} samples with {features.shape[1]} features each.")
 
 # Encode labels
 le = LabelEncoder()
@@ -95,9 +89,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     features, y_categorical, test_size=0.2, random_state=42, stratify=y_categorical
 )
 
-# ----------------------------------
-# 🧠 Define and Train Neural Network
-# ----------------------------------
+# Define and Train Neural Network
 model = Sequential([
 Dense(128, activation='relu', input_shape=(features.shape[1],)),
 Dense(64, activation='relu'),
@@ -117,11 +109,9 @@ history = model.fit(X_train, y_train, epochs=30, batch_size=8, validation_data=(
 
 plt.figure(figsize=(6, 5))
 
-# -------------------
-# 🎯 Evaluation
-# -------------------
+# Evaluation
 loss, acc = model.evaluate(X_test, y_test)
-print(f"\n📈 Neural Network Accuracy: {acc * 100:.2f}%")
+print(f"\n Neural Network Accuracy: {acc * 100:.2f}%")
 
 # Confusion Matrix
 y_pred_probs = model.predict(X_test)
@@ -135,15 +125,14 @@ early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=50, callbacks=[early_stop])
 os.makedirs(r"C:/Users/user/Desktop/hardware", exist_ok=True)
 model.save(r"C:/Users/user/Desktop/hardware/animal_detector.h5")
-print("✅ Model saved as animal_detector.h5", flush=True)
+print(" Model saved as animal_detector.h5", flush=True)
 disp.plot(cmap=plt.cm.Blues, values_format='d')
-plt.title("📊 Confusion Matrix")
+plt.title("Confusion Matrix")
 plt.grid(False)
 plt.show()
 
-# -----------------------
-# 📈 Plot Training Curves
-# -----------------------
+# Plot Training Curves
+
 plt.figure(figsize=(12, 5))
 
 # Accuracy plot
